@@ -5,8 +5,9 @@
  *@filename Articles.class.php
  *@author cg
  *@version 1.1
- *@modify:增加删除文章方法deletePassage($pid)、deletePTitle($pid)、deletePContent($pid)
- *@date 2013/12/03 23:23
+ *@modify:增加回收站相关方法toRecycle($pid)、fromRecycle($pid)，选取一篇文章方法selectOneP($pid)
+ *@modify:将检测insert\update\delete等SQL语句的冗余代码封装到方法_query($sql)中
+ *@date 2013/12/04 21:42
  */
 class Articles extends Common
 {
@@ -68,15 +69,8 @@ class Articles extends Common
 		$sql .= "VALUES ";
 		$sql .= "($pid,'$summary_zh','$summary_en','$content_zh','$content_en')";
 		
-		$res = $this->db->query($sql);
-		if($this->db->getAffectedRows())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		$res = $this->_query($sql);
+		return $res;
 	}
 	
 	/**
@@ -96,17 +90,7 @@ class Articles extends Common
 			$res = false;
 		}
 		return $res;
-	}
-	
-	/**
-	 *更新文章内容
-	 *@param array $param存储文章数据的数组
-	 *@param integer $id 要更新的文章的ID
-	 *@return boolean $res true--success/false--failure
-	 */
-	public function updatePassage($param,$id)
-	{
-	}
+	}	
 	
 	/**
 	 *更新文章内容（标题等）数据
@@ -137,15 +121,8 @@ class Articles extends Common
 		$sql .= "psugesstion = '$psugesstion' ";
 		$sql .= "WHERE pid = $pid";
 		
-		$this->db->query($sql);
-		if($this->db->getAffectedRows())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		$res = $this->_query($sql);
+		return $res;
 	}
 	
 	/**
@@ -169,15 +146,8 @@ class Articles extends Common
 		$sql .= "content_en='content_en' ";
 		$sql .= "WHERE pid = $pid";
 		
-		$this->db->query($sql);
-		if($this->db->getAffectedRows())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		$res = $this->_query($sql);
+		return $res;
 	}
 	
 	/**
@@ -229,15 +199,8 @@ class Articles extends Common
 		$sql = "DELETE FROM " . $this->tableName;
 		$sql .= " WHERE pid = $pid";
 		
-		$this->db->query($sql);
-		if($this->db->getAffectedRows())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		$res = $this->_query($sql);
+		return $res;
 	}
 	
 	/**
@@ -251,7 +214,65 @@ class Articles extends Common
 		$sql = "DELETE FROM " . $this->tableName2;
 		$sql .= " WHERE pid = $pid";
 		
-		//冗余代码，要精简
+		$res = $this->_query($sql);
+		return $res;
+		
+	}
+	
+	/**
+	 *把文章标题等数据放进回收站
+	 *@param integer $pid 文章ID
+	 *@return boolean $res true--success/false--failure
+	 */
+	public function toRecycle($pid)
+	{
+		$sql = "UPDATE " . $this->tableName;
+		$sql .= " SET precycle = 0 ";
+		$sql .= "WHERE pid = $pid";
+		
+		$res = $this->_query($sql);
+		return $res;		
+	}
+	
+	/**
+	 *把文章标题等数据从回收站恢复
+	 *@param integer $pid 文章ID
+	 *@return boolean $res true--success/false--failure
+	 */
+	public function fromRecycle($pid)
+	{
+		$sql = "UPDATE " . $this->tableName;
+		$sql .= " SET precycle = 1 ";
+		$sql .= "WHERE pid = $pid";
+		
+		$res = $this->_query($sql);
+		return $res;		
+	}
+	
+	/**
+	 *获取一篇文章的所有数据
+	 *@param integer $pid 文章ID
+	 *@return array $data 存储文章所有数据的数组
+	 */
+	public function selectOneP($pid)
+	{
+		$sql = "SELECT t1.*,t2.* ";
+		$sql .= "FROM " . $this->tableName . " AS t1 ";
+		$sql .= "LEFT JOIN " $this->tableName2 . " AS t2 ";
+		$sql .= "WHERE pid=$pid";
+		$sql .= " LIMIT 1";
+		
+		$data = $this->db->query($sql);
+		return $data;
+	}	
+	
+	/**
+	 *执行insert\update\delete等SQL语句并返回是否成功的信息
+	 *@param string $sql SQL语句
+	 *@return boolean true--success/false--failure
+	 */
+	public function _query($sql)
+	{
 		$this->db->query($sql);
 		if($this->db->getAffectedRows())
 		{
