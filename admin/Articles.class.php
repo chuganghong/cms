@@ -4,7 +4,8 @@
  *@description 文章操作类，增加文章，更新文章
  *@filename Articles.class.php
  *@author cg
- *@version 1.0
+ *@version 1.1
+ *@modify:增加删除文章方法deletePassage($pid)、deletePTitle($pid)、deletePContent($pid)
  *@date 2013/12/03 23:23
  */
 class Articles extends Common
@@ -153,7 +154,7 @@ class Articles extends Common
 	 *@param integer $pid 文章ID
 	 *@return boolean $res true--success/false--failure
 	 */
-	public function updatePcontent($param,$pid)
+	public function updatePContent($param,$pid)
 	{
 		$summary_zh = $param['summary_zh'];
 		$summary_en = $param['summary_en'];
@@ -190,13 +191,76 @@ class Articles extends Common
 		$res = $this->updatePTitle($param,$pid);
 		if($res)
 		{
-			$res = $this->updatePcontent($param,$pid);
+			$res = $this->updatePContent($param,$pid);
 		}
 		else
 		{
 			$res = false;
 		}
 		return $res;
+	}
+	
+	/**
+	 *删除文章：删除文章标题等数据、删除文章内容等数据
+	 *@param integer $pid 文章ID
+	 *@return boolean $res true--success/false--failure
+	 */
+	public function deletePassage($pid)
+	{
+		if($this->deletePTitle($pid))
+		{
+			$res = $this->deletePContent($pid);
+		}
+		else
+		{
+			$res = false;
+		}
+		return $res;
+	}
+	
+	/**
+	 *删除文章标题等数据
+	 @param integer $pid 文章ID
+	 *@return boolean $res true--success/false--failure
+	 */
+	public function deletePTitle($pid)
+	{
+		//删除文章标题等数据
+		$sql = "DELETE FROM " . $this->tableName;
+		$sql .= " WHERE pid = $pid";
+		
+		$this->db->query($sql);
+		if($this->db->getAffectedRows())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 *删除文章内容等数据
+	 *@param integer $pid 文章ID
+	 *@return boolean $res true--success/false--failure
+	 */
+	public function deletePContent($pid)
+	{
+		//删除文章内容等数据
+		$sql = "DELETE FROM " . $this->tableName2;
+		$sql .= " WHERE pid = $pid";
+		
+		//冗余代码，要精简
+		$this->db->query($sql);
+		if($this->db->getAffectedRows())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 		
 }
