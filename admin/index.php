@@ -7,5 +7,29 @@
  *@version 1.0 
  *@date 2013/12/04 22:15
  */
-var_dump($_SERVER['REMOTE_ADDR']);
-var_dump($_SERVER['SERVER_PORT']);
+define('CMS',true);
+require './init/init.php';
+
+
+
+
+
+
+$smarty = new Smarty;
+
+$smarty->template_dir = './templates/';
+$smarty->compile_dir = './templates_c';
+$smarty->config_dir = './configs/';
+$smarty->cache_dir = './cache/';
+
+if(isset($_SESSION['admin']))
+{
+	$smarty->display('index.html');
+}
+else
+{
+	$action = 'mc/login.php';
+	$smarty->assign('action',$action);
+	
+	$smarty->display('login.html');
+}

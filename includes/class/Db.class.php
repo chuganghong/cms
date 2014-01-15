@@ -35,6 +35,29 @@ class Db
 	}
 	
 	/**
+	 *将查询结果存储到数组中
+	 *@param string $sql SQL语句
+	 *@return array $arr 存储查询结果的数组
+	 */
+	public function getRows($sql)
+	{
+		$res = $this->query($sql);
+		$arr = array();
+		while($row=mysql_fetch_array($res))
+		{
+			$arr[] = $row;
+		}
+		return $arr;
+	}
+	
+	public function getRow($sql)
+	{
+		$res = $this->query($sql);		
+		$row = mysql_fetch_array($res);
+		return $row;
+	}
+	
+	/**
 	 *取得上一步 INSERT 操作产生的 ID 
 	 */
 	public function getInsertId()
@@ -44,15 +67,13 @@ class Db
 	}
 	
 	/**
-	 *取得上一步inset,update,delete操作所影响的行数
+	 *取得上一步insert,update,delete操作所影响的行数
 	 */
 	public function getAffectedRows()
 	{
 		$rows = mysql_affected_rows();
 		return $rows;
 	}
-
-
 	
 	/**
 	 *输出数据库操作的错误信息

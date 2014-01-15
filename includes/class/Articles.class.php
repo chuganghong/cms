@@ -258,7 +258,7 @@ class Articles extends Common
 	{
 		$sql = "SELECT t1.*,t2.* ";
 		$sql .= "FROM " . $this->tableName . " AS t1 ";
-		$sql .= "LEFT JOIN " $this->tableName2 . " AS t2 ";
+		$sql .= "LEFT JOIN " . $this->tableName2 . " AS t2 ";
 		$sql .= "WHERE pid=$pid";
 		$sql .= " LIMIT 1";
 		
