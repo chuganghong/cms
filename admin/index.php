@@ -10,26 +10,11 @@
 define('CMS',true);
 require './init/init.php';
 
-
-
-
-
-
-$smarty = new Smarty;
-
-$smarty->template_dir = './templates/';
-$smarty->compile_dir = './templates_c';
-$smarty->config_dir = './configs/';
-$smarty->cache_dir = './cache/';
-
 if(isset($_SESSION['admin']))
-{
-	$smarty->display('index.html');
+{	
+	Header('Location:admin.php');
 }
 else
 {
-	$action = 'mc/login.php';
-	$smarty->assign('action',$action);
-	
-	$smarty->display('login.html');
+	Header('Location:admin.php?act=login');
 }

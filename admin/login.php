@@ -9,11 +9,27 @@
  */
 define('CMS',true);
 
-require '../init/init.php';
+require './init/init.php';
 
 $name = $_POST['name'];
 $pwd = $_POST['password'];
 
+
 $res = $admin->login($name,$pwd);
-var_dump($res);exit;
+
+if($res)
+{
+	$link = './index.php';
+	$msg = '登录成功';
+	$admin->cms_header($link,$msg);
+}
+else
+{
+	
+	
+	
+	$link = './index.php';
+	$msg = '登录失败';
+	$admin->cms_header($link,$msg);
+}
 
