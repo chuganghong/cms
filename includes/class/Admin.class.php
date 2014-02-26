@@ -94,5 +94,54 @@ class Admin extends Common
 		$session = $_SESSION;
 		$this->minus_session($key,$session);
 	}
+	
+	/**
+	 *@description 获取本程序的系统信息
+	 *@return array $sys_info	本程序的系统信息
+	 *@date 2014/02/26 21:00
+	 */
+	public function sys_info()
+	{
+		$sys_info = array();		
+		//获取程序路径
+		global $root_path;
+		$sys_path = $root_path;
+		
+		//获取服务器时间
+		$sys_time = date('Y-n-d H:i:s',time());
+		//var_dump($sys_time);
+		
+		//php版本
+		$sys_php = phpversion();
+		//var_dump($sys_php);
+		
+		//mysql版本
+		$sys_mysql = $this->db->mysql_version();		
+		//var_dump($sys_mysql);
+		
+		//服务器版本
+		$sys_web_info = $_SERVER['SERVER_SIGNATURE'];
+		//var_dump($sys_web);//<address>Apache/2.2.22 (Win32) PHP/5.4.3 Server at 127.0.0.1 Port 80</address>
+		$pattern_web = '#<address>(.*)</address>#i';
+		$num = preg_match($pattern_web,$sys_web_info,$match);
+		//var_dump($num);exit;
+		if($num)
+		{
+			$sys_web = strstr($match[1],'PHP',true);
+		}
+		else
+		{
+			$sys_web = '';
+		}
+		
+		//var_dump($sys_web);
+		//远程文件获取 1--支持；0--不支持
+		$allow = ini_get('allow_url_fopen');
+		
+		//最大文件上传限制	max_file_uploads
+		//var_dump(ini_get_all());
+		$sys_uploads = ini_get('max_file_uploads');
+		
+	}
 		
 }

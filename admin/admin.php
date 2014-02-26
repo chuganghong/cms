@@ -38,7 +38,10 @@ switch($act)
 		$smarty->display('top.html');
 		break;
 	case 'main':
-		$hi = 2;
+		$time = time();
+		$time = date('Y-M-D H:m:s');
+		$hi = $time;
+		$admin->sys_info();
 		$smarty->assign('hi',$hi);
 		$smarty->display('main.html');
 		break;

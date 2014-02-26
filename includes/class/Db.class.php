@@ -91,4 +91,16 @@ class Db
 			echo $errorMsg;
 		}
 	}
+	
+	/**
+	 *@description 获取服务器上的mysql的版本
+	 *@return string $info mysql的版本
+	 */
+	public function mysql_version()
+	{
+		$sql = 'SELECT VERSION()';
+		$infos = $this->getRow($sql);
+		$info = $infos[0];
+		return $info;
+	}
 }
