@@ -96,29 +96,44 @@ class Admin extends Common
 	}
 	
 	/**
-	 *@description 获取本程序的系统信息
-	 *@return array $sys_info	本程序的系统信息
-	 *@date 2014/02/26 21:00
+	 *@description 获取本程序的路径
+	 *@return string $path 本程序的路径
 	 */
-	public function sys_info()
+	public function sys_path()
 	{
-		$sys_info = array();		
 		//获取程序路径
 		global $root_path;
 		$sys_path = $root_path;
 		
-		//获取服务器时间
-		$sys_time = date('Y-n-d H:i:s',time());
-		//var_dump($sys_time);
-		
-		//php版本
+		return $sys_path;
+	}
+	
+	/**
+	 *@description 获取服务器时间
+	 *@return string $sys_time 服务器时间
+	 */
+	public function sys_time()
+	{
+		$sys_time = date('Y-n-d H:i:s');
+		return $sys_time;
+	}
+	
+	/**
+	 *@description 获取PHP版本
+	 *@return string $sys_php PHP版本
+	 */
+	public function sys_php()
+	{
 		$sys_php = phpversion();
-		//var_dump($sys_php);
-		
-		//mysql版本
-		$sys_mysql = $this->db->mysql_version();		
-		//var_dump($sys_mysql);
-		
+		return $sys_php;
+	}
+	
+	/**
+	 *@description 获取web服务器信息
+	 *@return string $sys_web web服务器信息
+	 */
+	public function sys_web()
+	{
 		//服务器版本
 		$sys_web_info = $_SERVER['SERVER_SIGNATURE'];
 		//var_dump($sys_web);//<address>Apache/2.2.22 (Win32) PHP/5.4.3 Server at 127.0.0.1 Port 80</address>
@@ -134,14 +149,110 @@ class Admin extends Common
 			$sys_web = '';
 		}
 		
-		//var_dump($sys_web);
-		//远程文件获取 1--支持；0--不支持
-		$allow = ini_get('allow_url_fopen');
+		return $sys_web;
+	}
+	
+	/**
+	 *@description 获取mysql版本信息
+	 *@return string $sys_mysql
+	 */
+	public function sys_mysql()
+	{
+		//mysql版本
+		$sys_mysql = $this->db->mysql_version();		
+		//var_dump($sys_mysql);
+		return $sys_mysql;
+	}
+	
+	/**
+	 *@description 检测是否支持获取远程文件
+	 *@return boolean $yn true--支持,false--不支持
+	 */
+	public function is_remote()
+	{
+		$res = ini_get('allow_url_fopen');
+		$yn = ($res==1)?true:false;
+		return $yn;
+	}
+	
+	/**
+	 *@description 获取支持上传的最大文件所占空间
+	 *@return int $max_file 能够上传的最大文件所占空间，单位为M
+	 */
+	public function max_file()
+	{
+		$max_file = ini_get('max_file_uploads');
+		return $max_file;
+	}
+	
+	/**
+	 *@description 检测PHP是否支持GD库以及获取GD库版本
+	 *@return mixed $sys_gd true--支持，false--不支持
+	 */
+	public function sys_gd()
+	{
+		if(extension_loaded('gd'))
+		{
+			$sys_gd = gd_info();	//取得当前安装的 GD 库的信息			
+		}
+		else
+		{
+			$sys_gd = false;
+		}
+		return $sys_gd;
+	}
+	
+	/**
+	 *@description 获取运行PHP的操作系统的信息
+	 *@return string $sys_os 操作系统信息
+	 */
+	public function sys_os()
+	{
+		//var_dump(php_uname('s'));
+		$sys_os = PHP_OS;
+		//var_dump($sys_os);
+		return $sys_os;
+	}
+	/**
+	 *@description 检测数据库所占空间大小
+	 *@return int $size 数据库所站空间大小，单位为M
+	 */
+	public function db_size()
+	{
+		$sql = 'SHOW TABLE STATUS FROM ecshop';
+		$res = $this->db->getRows($sql);
+		$data = 0;
+		//var_dump($res);
+		foreach($res as $v)
+		{
+			$data += $v['Max_data_length'];
+		}
+		var_dump($data);
+		var_dump($data/1024/1024);
+	}
+	
+	/**
+	 *@description 获取本程序的系统信息
+	 *@return array $sys_info	本程序的系统信息
+	 *@date 2014/02/26 21:00
+	 */
+	public function sys_info()
+	{
+		$sys_info = array();
 		
-		//最大文件上传限制	max_file_uploads
-		//var_dump(ini_get_all());
-		$sys_uploads = ini_get('max_file_uploads');
-		
+		$sys_info = array(
+			'sys_path'	=>	$this->sys_path(),
+			'sys_time'	=>	$this->sys_time(),
+			'sys_php'	=>	$this->sys_php(),
+			'sys_web'	=>	$this->sys_web(),
+			'sys_mysql'	=>	$this->sys_mysql(),
+			'is_remote'	=>	$this->is_remote(),
+			'max_file'	=>	$this->max_file(),
+			'sys_gd'	=>	$this->sys_gd(),
+			'sys_os'	=>	$this->sys_os(),
+			);
+		//var_dump($sys_info);
+		return $sys_info;
 	}
 		
 }

@@ -41,8 +41,8 @@ switch($act)
 		$time = time();
 		$time = date('Y-M-D H:m:s');
 		$hi = $time;
-		$admin->sys_info();
-		$smarty->assign('hi',$hi);
+		$sys_info = $admin->sys_info();
+		$smarty->assign('sys_info',$sys_info);
 		$smarty->display('main.html');
 		break;
 	case 'left':

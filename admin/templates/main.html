@@ -3,6 +3,15 @@
 <head>
 </head>
 <body>
-<p>main--{$hi}</p>
+<p>系统信息</p>
+<hr/>
+<p>服务器时间：{$sys_info.sys_time}</p>
+<p>操作系统：{$sys_info.sys_os}</p>
+<p>PHP版本：{$sys_info.sys_php}</p>
+<p>WEB服务器信息：{$sys_info.sys_web}</p>
+<p>最大上传文件限制：{$sys_info.max_file}M</p>
+<p>是否支持远程文件获取：{if $sys_info.sys_php}支持{else}不支持{/if}</p>
+<p>是否安装GD库：{if $sys_info.sys_php}支持{else}不支持{/if}</p>
+<p>MySQL版本：{$sys_info.sys_php}</p>
 </body>
 </html>

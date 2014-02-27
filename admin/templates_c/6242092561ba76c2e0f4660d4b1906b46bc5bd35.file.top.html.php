@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2014-02-24 15:11:55
+<?php /* Smarty version Smarty-3.1.12, created on 2014-02-27 14:05:08
          compiled from ".\templates\top.html" */ ?>
 <?php /*%%SmartyHeaderCode:17889530b5ef0de4296-87674274%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6242092561ba76c2e0f4660d4b1906b46bc5bd35' => 
     array (
       0 => '.\\templates\\top.html',
-      1 => 1393254712,
+      1 => 1393509903,
       2 => 'file',
     ),
   ),
@@ -32,7 +32,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 	</div>
 	<div>
 		<ul>
-			<li>管理首页</li>
+			<li><a href="admin.php?act=main" target="main">管理首页</a></li>
 			<li>网站相关</li>
 			<li>文章管理</li>
 			<li>会员管理</li>
